@@ -14,13 +14,13 @@ This effect is used here in this blog site, so you can see it in action.
 
 To atcheive it, we will be using Framer Motion package, so go ahead and install it.
 
-```
+```npm
 npm install framer-motion
 ```
 
 Next, import it in your Navbar component. We will also use **useScroll** and **useMotionValueEvent** hooks.
 
-```
+```tsx
 import { motion, useScroll, useMotionValueEvent } from "framer-motion";
 ```
 
@@ -28,7 +28,7 @@ We need to update the nav property to use motion. We also set variants that are 
 
 I gave the navbar some simple Tailwind CSS styling, but feel free to style it as you please.
 
-```
+```html
 <motion.nav
         variants={{
           visible: { y: 0 },
@@ -46,7 +46,7 @@ I gave the navbar some simple Tailwind CSS styling, but feel free to style it as
 
 Add this:
 
-```
+```tsx
 const { scrollY } = useScroll();
   const [navHidden, setNavHidden] = useState(false);
 
