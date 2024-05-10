@@ -14,7 +14,7 @@ This effect is used here in this blog site, so you can see it in action.
 
 To atcheive it, we will be using Framer Motion package, so go ahead and install it.
 
-```npm
+```bash
 npm install framer-motion
 ```
 
@@ -28,7 +28,7 @@ We need to update the nav property to use motion. We also set variants that are 
 
 I gave the navbar some simple Tailwind CSS styling, but feel free to style it as you please.
 
-```html
+```tsx
 <motion.nav
         variants={{
           visible: { y: 0 },
@@ -41,7 +41,7 @@ I gave the navbar some simple Tailwind CSS styling, but feel free to style it as
        
        {/* Your nav links goes here */}
 
-      </motion.nav>
+</motion.nav>
 ```
 
 Add this:
@@ -58,7 +58,7 @@ const { scrollY } = useScroll();
     } else {
       setNavHidden(false);
     }
-  });
+});
 ```
 
 And you're done.
