@@ -1,0 +1,64 @@
+---
+title: "Hide navbar on scroll"
+description: "Hide navbar on scroll using Framer Motion package"
+author: "Janis Akmentins"
+authorImage: "https://lh3.googleusercontent.com/a/ACg8ocLZYmR7151WggtCmwlpqbsvDxMcTxva3CQzxRm8q123b3o=s96-c"
+date: "2024-04-20"
+image: "https://raw.githubusercontent.com/Akmenz/mdx_blogposts/main/images/framer.png"
+tags: ["react", "typescript"]
+---
+
+This is a quick tutorial on how to hide the navbar when scrolling down, and make it reappear when scrolling back up.
+
+This effect is used here in this blog site, so you can see it in action.
+
+To atcheive it, we will be using Framer Motion package, so go ahead and install it.
+
+```
+npm install framer-motion
+```
+
+Next, import it in your Navbar component. We will also use **useScroll** and **useMotionValueEvent** hooks.
+
+```
+import { motion, useScroll, useMotionValueEvent } from "framer-motion";
+```
+
+We need to update the nav property to use motion. We also set variants that are using normal CSS classes, animate, and transition.
+
+I gave the navbar some simple Tailwind CSS styling, but feel free to style it as you please.
+
+```
+<motion.nav
+        variants={{
+          visible: { y: 0 },
+          hidden: { y: "-100%" },
+        }}
+        animate={navHidden ? "hidden" : "visible"}
+        transition={{ duration: 0.4, ease: "easeInOut" }}
+        className="fixed w-full bg-slate-300 p-10 flex justify-between items-center z-50"
+      >
+       
+       {/* Your nav links goes here */}
+
+      </motion.nav>
+```
+
+Add this:
+
+```
+const { scrollY } = useScroll();
+  const [navHidden, setNavHidden] = useState(false);
+
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    const previous = scrollY.getPrevious();
+
+    if (previous != undefined && latest > previous && latest > 100) {
+      setNavHidden(true);
+    } else {
+      setNavHidden(false);
+    }
+  });
+```
+
+And you're done.
