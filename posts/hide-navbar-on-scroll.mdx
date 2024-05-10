@@ -12,21 +12,32 @@ This is a quick tutorial on how to hide the navbar when scrolling down, and make
 
 This effect is used here in this blog site, so you can see it in action.
 
-To atcheive it, we will be using Framer Motion package, so go ahead and install it.
+To achieve it, we will be using Framer Motion package, so go ahead and install it.
+
+&nbsp;
 
 ```bash
 npm install framer-motion
 ```
+&nbsp;
 
 Next, import it in your Navbar component. We will also use **useScroll** and **useMotionValueEvent** hooks.
+
+&nbsp;
 
 ```tsx
 import { motion, useScroll, useMotionValueEvent } from "framer-motion";
 ```
 
+&nbsp;
+
 We need to update the nav property to use motion. We also set variants that are using normal CSS classes, animate, and transition.
 
+Animate is a boolean that will use the variant based on the value of navHidden variable.
+
 I gave the navbar some simple Tailwind CSS styling, but feel free to style it as you please.
+
+&nbsp;
 
 ```tsx
 <motion.nav
@@ -39,12 +50,16 @@ I gave the navbar some simple Tailwind CSS styling, but feel free to style it as
         className="fixed w-full bg-slate-300 p-10 flex justify-between items-center z-50"
       >
        
-       {/* Your nav links goes here */}
+       {/* Your nav links go here */}
 
 </motion.nav>
 ```
 
+&nbsp;
+
 Add this:
+
+&nbsp;
 
 ```tsx
 const { scrollY } = useScroll();
@@ -60,5 +75,7 @@ const { scrollY } = useScroll();
     }
 });
 ```
+
+&nbsp;
 
 And you're done.
