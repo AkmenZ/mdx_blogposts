@@ -1,0 +1,133 @@
+---
+title: "NextJS cookie consent"
+description: "Setup cookie consent banner in a NextJS application"
+author: "Janis Akmentins"
+authorImage: "https://lh3.googleusercontent.com/a/ACg8ocLZYmR7151WggtCmwlpqbsvDxMcTxva3CQzxRm8q123b3o=s96-c"
+date: "2024-06-17"
+image: "https://raw.githubusercontent.com/Akmenz/mdx_blogposts/main/images/nextjs_cookies.webp"
+tags: ["nextjs", "typescript"]
+---
+
+Implementing a cookie consent banner is essential for compliance with privacy laws like the GDPR. It ensures that users are informed about cookie usage and can give their consent before any cookies are stored on their devices. This tutorial will guide you through setting up a cookie consent banner in a NextJS 14 application.
+
+First of all, lets install `cookies-next` package.
+
+&nbsp;
+
+```bash
+npm install cookies-next
+```
+
+&nbsp;
+
+Create a new file in the `Components` folder, call it something like `CookieConsent.tsx`. We will utilize React hooks, so it has to be a client component.
+
+We will use `hasCookie` and `setCookie` hooks from `cookies-next` package, to make things simple. I gave it a name `cookieConsent`, but you can name it how you want. 
+
+Initialy, set the state to be `false`; it might load a bit late, but this way it's better than showing it for a split second before it disappears if the user has accepted it. We also use `useEffect` hook to check if the cookie exists when the component loads for the first time.
+
+Then we make a simple function to set the consent cookie, hide the component, and attach it to a buttons `onClick` event. We return the component only when `showConsent` is `true`.
+
+In this example I'm using `Tailwind CSS` and `Next UI` component library for styling. Feel free to adjust it to your styling needs.
+
+&nbsp;
+
+```tsx
+"use client";
+
+import { Button } from "@nextui-org/react";
+import Link from "next/link";
+import { hasCookie, setCookie } from "cookies-next";
+import { useEffect, useState } from "react";
+
+export default function CookieConsent() {
+  const [showConsent, setShowConsent] = useState(false);
+
+  useEffect(() => {
+    setShowConsent(!hasCookie("cookieConsent"));
+  }, []);
+
+  function giveConsent() {
+    setCookie("cookieConsent", true);
+    setShowConsent(false);
+  }
+
+  return (
+    <>
+      {showConsent && (
+        <>
+          <div className="fixed inset-0 bg-black bg-opacity-50 z-40"></div>
+          <div className="fixed bottom-0 left-0 w-full bg-white p-6 z-50 flex justify-between items-center border-t border-black border-opacity-20">
+            <p>
+              This website uses cookies to improve user experience. By using
+              this website you consent to all the Terms of Usage in accordance
+              with our{" "}
+              {
+                <Link
+                  href={"/{ Link To Your Privacy Policy Page }"}
+                  className="text-blue-500 underline"
+                >
+                  Privacy Policy
+                </Link>
+              }
+            </p>
+            <Button
+              color="secondary"
+              variant="ghost"
+              radius="sm"
+              onClick={giveConsent}
+            >
+              Accept
+            </Button>
+          </div>
+        </>
+      )}
+    </>
+  );
+}
+```
+
+&nbsp;
+
+The default expire time for this cookie is 1 hour. If you need to adjust that, update the function by passing additional options.
+
+&nbsp;
+
+```tsx
+function giveConsent() {
+  // setting expire time to be 1 day
+  const oneDayFromNow = new Date();
+  oneDayFromNow.setDate(oneDayFromNow.getDate() + 1);
+  setCookie("cookieConsent", true, { expires: oneDayFromNow });
+  setShowConsent(false);
+}
+```
+
+&nbsp;
+
+To use it, simply include it in your `layout.tsx` file.
+
+&nbsp;
+
+```tsx
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en">
+      <body className={inter.className}>
+        <Nav></Nav>
+        <div>{children}</div>
+        <CookieConsent></CookieConsent>
+        <Footer></Footer>
+      </body>
+    </html>
+  );
+}
+```
+
+&nbsp;
+
+That's it.
