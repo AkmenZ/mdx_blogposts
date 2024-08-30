@@ -1,0 +1,229 @@
+---
+title: "Flutter 3D Controller"
+description: "Create a stunning 3D product page"
+author: "Janis Akmentins"
+authorImage: "https://lh3.googleusercontent.com/a/ACg8ocLZYmR7151WggtCmwlpqbsvDxMcTxva3CQzxRm8q123b3o=s96-c"
+date: "2024-08-30"
+image: "https://raw.githubusercontent.com/Akmenz/mdx_blogposts/main/images/flutter3d.webp"
+tags: ["flutter", "mobile"]
+---
+
+In this tutorial we will create a simple product page, but we will use a 3D object. To do it we will utilize `flutter_3d_controller` package.
+
+This is a versatile 3D rendering package, that also allows to control animations. The goal is to create an interactive page, where the object slowly spins arround, but the user can hold it and rotate it as they please.
+
+Here's a preview of how the complete page will look.
+
+![Example Image](https://raw.githubusercontent.com/Akmenz/mdx_blogposts/main/images/flutter3d.gif){class="w-full"}
+
+&nbsp;
+
+Pretty cool right? So lets begin by adding the package. In my case, I'm using version `1.3.1`.
+
+You can paste it in `pubspec.yaml` file manually, or using a command:
+
+```bash
+flutter pub add flutter_3d_controller
+```
+
+&nbsp;
+
+And here is the full code for creating such a page. Off course design it how ever you please.
+
+```dart
+import 'dart:async';
+import 'package:flutter/material.dart';
+import 'package:flutter_3d_controller/flutter_3d_controller.dart';
+
+class ProductPage extends StatefulWidget {
+  const ProductPage({super.key});
+
+  @override
+  State<ProductPage> createState() => _ProductPageState();
+}
+
+class _ProductPageState extends State<ProductPage> {
+  Flutter3DController myController = Flutter3DController();
+  Timer? _rotationTimer;
+  double angle = 0.0;
+  bool isRotating = true;
+  DateTime? lastUpdate;
+  bool userInteracting = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.pointerRouter.addGlobalRoute(_handlePointerEvent);
+    _autoRotate();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.pointerRouter
+        .removeGlobalRoute(_handlePointerEvent);
+    _rotationTimer?.cancel();
+    super.dispose();
+  }
+
+  void _handlePointerEvent(PointerEvent event) {
+    if (event is PointerDownEvent) {
+      _stopRotation();
+      userInteracting = true;
+    } else if (event is PointerUpEvent) {
+      userInteracting = false;
+      _resumeRotation();
+    }
+  }
+
+  void _autoRotate() {
+    _rotationTimer = Timer.periodic(const Duration(milliseconds: 30), (timer) {
+      if (isRotating && !userInteracting) {
+        setState(() {
+          angle += 1.0;
+        });
+
+        // updating the camera every 200 miliseconds
+        if (lastUpdate == null ||
+            DateTime.now().difference(lastUpdate!) >
+                const Duration(milliseconds: 200)) {
+          lastUpdate = DateTime.now();
+          _updateCameraOrbit();
+        }
+      }
+    });
+  }
+
+  void _updateCameraOrbit() {
+    if (isRotating) {
+      myController.setCameraOrbit(angle, 70, 100);
+    }
+  }
+
+  void _stopRotation() {
+    setState(() {
+      isRotating = false;
+    });
+  }
+
+  void _resumeRotation() {
+    setState(() {
+      isRotating = true;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("RedBull (Original)"),
+        backgroundColor: Colors.indigo.shade900,
+        foregroundColor: Colors.white,
+        leading: const Icon(Icons.arrow_back_ios),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.shopping_cart),
+            onPressed: () {
+              // navigate to cart logic
+            },
+          ),
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: 300,
+              child: Flutter3DViewer(
+                controller: myController,
+                progressBarColor: Colors.transparent,
+                src: 'assets/3d/redbull_can.glb', // your 3d asset
+              ),
+            ),
+            const Divider(
+              color: Colors.grey,
+              thickness: 1.0,
+            ),
+            const Text(
+              "RedBull (Original)",
+              style: TextStyle(fontSize: 26.0, fontWeight: FontWeight.w500),
+            ),
+            const Text(
+              "250ml",
+              style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.w300),
+            ),
+            const SizedBox(
+              height: 4,
+            ),
+            const Text('Nutritional Information (per 250 ml can):'),
+            Text(
+              'Calories: 110 kcal\n'
+              'Total Fat: 0 g\n'
+              'Cholesterol: 0 mg\n'
+              'Sodium: 105 mg (4% DV)\n'
+              'Total Carbohydrate: 28 g (9% DV)\n'
+              'Niacin (Vitamin B3): 22 mg (110% DV)\n'
+              'Vitamin B6: 5 mg (250% DV)\n'
+              'Vitamin B12: 5.1 µg (213% DV)\n'
+              'Caffeine: 80 mg\n'
+              'Taurine: 1000 mg\n'
+              'Glucuronolactone: 600 mg\n'
+              'Inositol: 50 mg\n',
+              style: TextStyle(
+                  color: Colors.indigo.shade900,
+                  fontSize: 12.0,
+                  fontWeight: FontWeight.w300),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            // add to cart button
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Row(
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.remove),
+                      onPressed: () {
+                        // decrease count
+                      },
+                    ),
+                    const Text(
+                      '1', // here should be the count
+                      style: TextStyle(fontSize: 18.0),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.add),
+                      onPressed: () {
+                        // increase count
+                      },
+                    ),
+                  ],
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    // add to cart logic goes here
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.indigo.shade900,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20.0, vertical: 12.0),
+                  ),
+                  child: const Text(
+                    'Add to Cart',
+                    style: TextStyle(fontSize: 18.0),
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+```
