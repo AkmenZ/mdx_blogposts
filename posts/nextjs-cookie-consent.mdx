@@ -8,9 +8,9 @@ image: "https://raw.githubusercontent.com/Akmenz/mdx_blogposts/main/images/nextj
 tags: ["nextjs", "typescript"]
 ---
 
-Implementing a cookie consent banner is essential for compliance with privacy laws like the GDPR. It ensures that users are informed about cookie usage and can give their consent before any cookies are stored on their devices. This tutorial will guide you through setting up a cookie consent banner in a NextJS 14 application.
+Implementing a cookie consent banner is essential for compliance with privacy laws like the **`GDPR`**. It ensures that users are informed about cookie usage and can give their consent before any cookies are stored on their devices. This tutorial will guide you through setting up a cookie consent banner in a NextJS 14 application.
 
-First of all, lets install `cookies-next` package.
+First of all, lets install **`cookies-next`** package.
 
 &nbsp;
 
@@ -20,15 +20,11 @@ npm install cookies-next
 
 &nbsp;
 
-Create a new file in the `Components` folder, call it something like `CookieConsent.tsx`. We will utilize React hooks, so it has to be a client component.
-
-We will use `hasCookie` and `setCookie` hooks from `cookies-next` package, to make things simple. I gave it a name `cookieConsent`, but you can name it how you want. 
-
-Initialy, set the state to be `false`; it might load a bit late, but this way it's better than showing it for a split second before it disappears if the user has accepted it. We also use `useEffect` hook to check if the cookie exists when the component loads for the first time.
-
-Then we make a simple function to set the consent cookie, hide the component, and attach it to a buttons `onClick` event. We return the component only when `showConsent` is `true`.
-
-In this example I'm using `Tailwind CSS` and `Next UI` component library for styling. Feel free to adjust it to your styling needs.
+Create a new file in the **`Components`** folder, call it something like **`CookieConsent.tsx`**. We will utilize React hooks, so it has to be a client component.
+We will use **`hasCookie`** and **`setCookie`** hooks from **`cookies-next`** package, to make things simple. I gave it a name **`cookieConsent`**, but you can name it how you want. 
+Initialy, set the state to be **`false`**; it might load a bit late, but this way it's better than showing it for a split second before it disappears if the user has accepted it. We also use **`useEffect`** hook to check if the cookie exists when the component loads for the first time.
+Then we make a simple function to set the consent cookie, hide the component, and attach it to a buttons **`onClick`** event. We return the component only when **`showConsent`** is **`true`**.
+In this example I'm using **`Tailwind CSS`** and **`Next UI`** component library for styling. Feel free to adjust it to your styling needs.
 
 &nbsp;
 
@@ -105,7 +101,7 @@ function giveConsent() {
 
 &nbsp;
 
-To use it, simply include it in your `layout.tsx` file.
+To use it, simply include it in your **`layout.tsx`** file.
 
 &nbsp;
 
@@ -127,7 +123,5 @@ export default function RootLayout({
   );
 }
 ```
-
 &nbsp;
 
-That's it.

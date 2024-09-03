@@ -32,11 +32,14 @@ flutter pub add flutter_3d_controller
 
 To create this functionality successfully, there are a few things to note. First of all we will need some 3D assets.
 For a business project, these would likely be created in accordance to your product offering. For testing, you can download some free assets from sites like [sketchfab.com](https://sketchfab.com/feed).
-I recommend working with **glb** or **gltf** formats, but **`flutter_3d_controller`** support other formats as well.
+I recommend working with **`glb`** or **`gltf`** formats, but **`flutter_3d_controller`** will support other formats as well.
+Next we will make an auto-rotate function that will periodically update the angle variable. We then can use this angle value in **`setCameraOrbit`** function to rotate the 3D object. This now will rotate the object, but we also want to be able to interact with it via touch.
+While it might seem intuitive to use the **`GestureDetector`** to disable auto-rotation when we touch the object, this will not work as expected, as the **`Flutter3DViewer`** widget handles touch events internally.
+One way to work arround that is to use **`PointerEvent`**. This will allow us to detect touch interactions and manage the auto-rotation behavior.
 
 &nbsp;
 
-And here is the full code for creating such a page. Off course design it how ever you please.
+And here is the full code for creating such a page. Of course, feel free to design it however you like. While this example is for a product page, you can easily adapt the code for different purposes depending on your project's needs.
 
 &nbsp;
 
