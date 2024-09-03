@@ -8,7 +8,7 @@ image: "https://raw.githubusercontent.com/Akmenz/mdx_blogposts/main/images/flutt
 tags: ["flutter", "mobile"]
 ---
 
-In this tutorial we will create a simple product page, but we will use a 3D object. To do it we will utilize `flutter_3d_controller` package.
+In this tutorial we will create a simple product page, but we will use a 3D object. To do it we will utilize **`flutter_3d_controller`** package.
 
 This is a versatile 3D rendering package, that also allows to control animations. The goal is to create an interactive page, where the object slowly spins arround, but the user can hold it and rotate it as they please.
 
@@ -18,9 +18,9 @@ Here's a preview of how the complete page will look.
 
 &nbsp;
 
-Pretty cool right? So lets begin by adding the package. In my case, I'm using version `1.3.1`.
+Pretty cool right? So lets begin by adding the package. In my case, I'm using version **`1.3.1`**.
 
-You can paste it in `pubspec.yaml` file manually, or using a command:
+You can paste it in **`pubspec.yaml`** file manually, or using a command:
 
 &nbsp;
 
@@ -30,7 +30,9 @@ flutter pub add flutter_3d_controller
 
 &nbsp;
 
-To create this functionality successfully, there are a few things to note. 
+To create this functionality successfully, there are a few things to note. First of all we will need some 3D assets.
+For a business project, these would likely be created in accordance to your product offering. For testing, you can download some free assets from sites like [sketchfab.com](https://sketchfab.com/feed).
+I recommend working with **glb** or **gltf** formats, but **`flutter_3d_controller`** support other formats as well.
 
 &nbsp;
 
@@ -233,5 +235,4 @@ class _ProductPageState extends State<ProductPage> {
     );
   }
 }
-
 ```
